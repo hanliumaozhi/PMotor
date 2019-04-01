@@ -7,7 +7,7 @@
 
 #define PWM_INTERVAL 0.00005f
 #define MAX_PWM 500
-#define MIN_LOW_COUNTER 40
+#define MIN_LOW_COUNTER 45
 
 extern volatile uint16_t so_1_raw_val;
 extern volatile uint16_t so_2_raw_val;

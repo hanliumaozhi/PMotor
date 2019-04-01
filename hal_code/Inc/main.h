@@ -70,6 +70,8 @@ void Error_Handler(void);
 #define LD2_GPIO_Port GPIOA
 #define DRV8301_EN_Pin GPIO_PIN_7
 #define DRV8301_EN_GPIO_Port GPIOC
+#define debug_pin_Pin GPIO_PIN_8
+#define debug_pin_GPIO_Port GPIOC
 #define TMS_Pin GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14

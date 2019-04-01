@@ -120,8 +120,15 @@ int main(void)
 	as5048a_read_two();
 	set_us_delay(&htim2);
 	
+	inverter_setup(&htim1, &hspi3, SPI3_EN_GPIO_Port, SPI3_EN_Pin);
+	inverter_init(&hadc1, &hadc2, DRV8301_EN_GPIO_Port, DRV8301_EN_Pin, PWM_INTERVAL);
+	
 	//for counter
 	HAL_TIM_Base_Start(&htim2);
+	
+	HAL_TIM_Base_Start_IT(&htim1);
+	
+	//__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 45);
 
 	/* USER CODE END 2 */
 
@@ -133,13 +140,13 @@ int main(void)
 
 		/* USER CODE BEGIN 3 */
 		
-		s_pre_counter = __HAL_TIM_GET_COUNTER(&htim2);
-		as5048a_read();
-		s_post_counter = __HAL_TIM_GET_COUNTER(&htim2);
-		s_total_time += (s_post_counter - s_pre_counter);
-		++s_counter;
-		if (falut_status != 0){
-			++s_error_counter;
+			/*s_pre_counter = __HAL_TIM_GET_COUNTER(&htim2);
+			as5048a_read();
+			s_post_counter = __HAL_TIM_GET_COUNTER(&htim2);
+			s_total_time += (s_post_counter - s_pre_counter);
+			++s_counter;
+			if (falut_status != 0){
+				++s_error_counter;
 		}
 		delay_us(45);
 		if (s_counter == 10000){
@@ -148,7 +155,14 @@ int main(void)
 			s_total_time = 0;
 			s_counter = 0;
 			s_error_counter = 0;	
-		}
+		}*/
+		so_1_voltage = ((float)so_1_raw_val) / 4095.0f * 3.3f;
+		so_2_voltage = ((float)so_2_raw_val) / 4095.0f * 3.3f;
+		sprintf(msg, "%f --- %f \r\n", so_1_voltage, so_2_voltage);
+		HAL_UART_Transmit(&huart2, (uint8_t*) msg, strlen(msg), HAL_MAX_DELAY);
+		HAL_Delay(1000);
+		
+		
 	}
 	/* USER CODE END 3 */
 }
@@ -203,7 +217,15 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void TIM1_UP_TIM10_IRQHandler(void)
+{
+	if (TIM1->SR & TIM_SR_UIF) {
+		debug_pin_GPIO_Port->ODR ^= debug_pin_Pin;
+		inverter_sample_current();
+		debug_pin_GPIO_Port->ODR ^= debug_pin_Pin;
+	}
+	TIM1->SR = 0x0;
+}
 /* USER CODE END 4 */
 
 /**
@@ -213,7 +235,7 @@ void SystemClock_Config(void)
 void Error_Handler(void)
 {
 	/* USER CODE BEGIN Error_Handler_Debug */
-	/* User can add his own implementation to report the HAL error return state */
+	  /* User can add his own implementation to report the HAL error return state */
 
 	/* USER CODE END Error_Handler_Debug */
 }
@@ -229,9 +251,9 @@ void Error_Handler(void)
 void assert_failed(uint8_t *file, uint32_t line)
 { 
 	/* USER CODE BEGIN 6 */
-	/* User can add his own implementation to report the file name and line number,
-	   tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-	 /* USER CODE END 6 */
+	  /* User can add his own implementation to report the file name and line number,
+	     tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+    /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
 
