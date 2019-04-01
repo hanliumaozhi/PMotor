@@ -33,6 +33,7 @@
 #include "coordinate_change.h"
 #include "utils.h"
 #include "as5048a.h"
+#include "inverter.h"
 
 /* USER CODE END Includes */
 

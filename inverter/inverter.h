@@ -5,6 +5,10 @@
 #include "tim.h"
 #include "drv8301.h"
 
+#define PWM_INTERVAL 0.00005f
+#define MAX_PWM 500
+#define MIN_LOW_COUNTER 40
+
 extern volatile uint16_t so_1_raw_val;
 extern volatile uint16_t so_2_raw_val;
 
@@ -28,4 +32,6 @@ void inverter_sample_current();
 void inverter_get_current(float *a, float *b, float *c);
 
 void inverter_set_pwm(float a_t, float b_t, float c_t);
+
+void inverter_set_pwm_percentage(float a_t, float b_t, float c_t);
 #endif // !INVERTER_H
