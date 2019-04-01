@@ -136,6 +136,7 @@ int main(void)
 	HAL_TIM_Base_Start(&htim2);
 	
 	HAL_TIM_Base_Start_IT(&htim1);
+	HAL_TIM_Base_Start_IT(&htim3);
 	
 	//__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 45);
 
@@ -171,7 +172,7 @@ int main(void)
 		HAL_UART_Transmit(&huart2, (uint8_t*) msg, strlen(msg), HAL_MAX_DELAY);
 		HAL_Delay(1000);*/
 		
-		s_pre_counter = __HAL_TIM_GET_COUNTER(&htim2);
+		/*s_pre_counter = __HAL_TIM_GET_COUNTER(&htim2);
 		IC_running(3.14159265359f);
 		s_post_counter = __HAL_TIM_GET_COUNTER(&htim2);
 		s_total_time += (s_post_counter - s_pre_counter);
@@ -182,7 +183,7 @@ int main(void)
 			s_total_time = 0;
 			s_counter = 0;
 			s_error_counter = 0;	
-		}
+		}*/
 		
 		
 		
@@ -243,11 +244,19 @@ void SystemClock_Config(void)
 void TIM1_UP_TIM10_IRQHandler(void)
 {
 	if (TIM1->SR & TIM_SR_UIF) {
-		debug_pin_GPIO_Port->ODR ^= debug_pin_Pin;
 		inverter_sample_current();
-		debug_pin_GPIO_Port->ODR ^= debug_pin_Pin;
 	}
 	TIM1->SR = 0x0;
+}
+
+void TIM3_IRQHandler(void)
+{
+	if (TIM3->SR){
+		debug_pin_GPIO_Port->ODR ^= debug_pin_Pin;
+	}
+	TIM3->SR = 0x0;
+	IC_running(3.14159265359f);
+	debug_pin_GPIO_Port->ODR ^= debug_pin_Pin;
 }
 /* USER CODE END 4 */
 
