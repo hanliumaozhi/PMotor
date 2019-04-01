@@ -5,6 +5,6 @@
 #include "as5048a.h"
 
 
-void impedance_controller_setup(float k_p, float k_d, float toa);
+void impedance_controller_setup(float k_p, float k_d, float toa, float pwm_interval);
 void IC_running(float position_ref);
 #endif // !IMPEDANCE_CONTROLLER_H

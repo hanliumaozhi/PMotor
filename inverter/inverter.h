@@ -6,6 +6,7 @@
 #include "drv8301.h"
 
 #define PWM_INTERVAL 0.00005f
+#define HALF_PWM_INTERVAL 0.000025f
 #define MAX_PWM 500
 #define MIN_LOW_COUNTER 45
 

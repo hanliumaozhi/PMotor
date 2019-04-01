@@ -34,6 +34,8 @@
 #include "utils.h"
 #include "as5048a.h"
 #include "inverter.h"
+#include "current_regulator.h"
+#include "impedance_controller.h"
 
 /* USER CODE END Includes */
 
@@ -118,10 +120,17 @@ int main(void)
 	as5048a_setup(&hspi2, SPI2_EN_GPIO_Port, SPI2_EN_Pin);
 	//for data init
 	as5048a_read_two();
+	encoder_setup(21.0f);
+	svpwm_setup(22.2f, HALF_PWM_INTERVAL);
 	set_us_delay(&htim2);
 	
 	inverter_setup(&htim1, &hspi3, SPI3_EN_GPIO_Port, SPI3_EN_Pin);
-	inverter_init(&hadc1, &hadc2, DRV8301_EN_GPIO_Port, DRV8301_EN_Pin, PWM_INTERVAL);
+	inverter_init(&hadc1, &hadc2, DRV8301_EN_GPIO_Port, DRV8301_EN_Pin, HALF_PWM_INTERVAL);
+	
+	impedance_controller_setup(0.01, 0.001f, 0.1071, PWM_INTERVAL);
+	
+	current_regulator_setup(0.2046f, 0.1535f);
+	current_regulator_init();
 	
 	//for counter
 	HAL_TIM_Base_Start(&htim2);
@@ -156,11 +165,25 @@ int main(void)
 			s_counter = 0;
 			s_error_counter = 0;	
 		}*/
-		so_1_voltage = ((float)so_1_raw_val) / 4095.0f * 3.3f;
+		/*so_1_voltage = ((float)so_1_raw_val) / 4095.0f * 3.3f;
 		so_2_voltage = ((float)so_2_raw_val) / 4095.0f * 3.3f;
 		sprintf(msg, "%f --- %f \r\n", so_1_voltage, so_2_voltage);
 		HAL_UART_Transmit(&huart2, (uint8_t*) msg, strlen(msg), HAL_MAX_DELAY);
-		HAL_Delay(1000);
+		HAL_Delay(1000);*/
+		
+		s_pre_counter = __HAL_TIM_GET_COUNTER(&htim2);
+		IC_running(3.14159265359f);
+		s_post_counter = __HAL_TIM_GET_COUNTER(&htim2);
+		s_total_time += (s_post_counter - s_pre_counter);
+		++s_counter;
+		if (s_counter == 10000) {
+			sprintf(msg, "time: %f \r\n", (s_total_time / 10000.0f));
+			HAL_UART_Transmit(&huart2, (uint8_t*) msg, strlen(msg), HAL_MAX_DELAY);
+			s_total_time = 0;
+			s_counter = 0;
+			s_error_counter = 0;	
+		}
+		
 		
 		
 	}
