@@ -3,6 +3,9 @@
 uint16_t write_word;
 uint16_t response_word_drv;
 
+uint16_t read_word;
+uint16_t response_status_drv;
+
 GPIO_TypeDef* DRV8301_PORT;
 uint16_t DRV8301_PIN;
 SPI_HandleTypeDef* DRV8301;
@@ -22,7 +25,9 @@ void drv8301_init(void)
 	// for 3 pwm input
 	write_word |= CTRL1_PWM_MODE_3_INPUT;
 	// for (60/7)A current limit (only for test)
-	write_word |= CTRL1_OC_ADJ_SET(0);
+	//write_word |= CTRL1_OC_ADJ_SET(0);
+	//for disable oc disabled
+	write_word |= CTRL1_OCP_MODE_DISABLED;
 	write_word |= DRV_SPI_CTRL1;
 	write_word |= DRV_SPI_WRITE;
 	
@@ -30,4 +35,15 @@ void drv8301_init(void)
 	HAL_SPI_TransmitReceive(DRV8301, (uint8_t *)&write_word, (uint8_t *)&response_word_drv, 1, HAL_MAX_DELAY);
 	HAL_GPIO_WritePin(DRV8301_PORT, DRV8301_PIN, GPIO_PIN_SET);
 
+}
+
+
+void read_drv8301_state(void)
+{
+	read_word = 0;
+	read_word |= DRV_SPI_READ;
+	read_word |= DRV_SPI_SR1;
+	HAL_GPIO_WritePin(DRV8301_PORT, DRV8301_PIN, GPIO_PIN_RESET);
+	HAL_SPI_TransmitReceive(DRV8301, (uint8_t *)&read_word, (uint8_t *)&response_status_drv, 1, HAL_MAX_DELAY);
+	HAL_GPIO_WritePin(DRV8301_PORT, DRV8301_PIN, GPIO_PIN_SET);
 }

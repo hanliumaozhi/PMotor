@@ -5,10 +5,11 @@
 #include "tim.h"
 #include "drv8301.h"
 
-#define PWM_INTERVAL 0.00005f
-#define HALF_PWM_INTERVAL 0.000025f
-#define MAX_PWM 500
-#define MIN_LOW_COUNTER 45
+#define PWM_INTERVAL 0.000025f
+#define HALF_PWM_INTERVAL 0.0000125f
+#define MAX_PWM 250
+#define MIN_LOW_COUNTER 30
+#define MIN_HIGH_COUNTER 235
 
 extern volatile uint16_t so_1_raw_val;
 extern volatile uint16_t so_2_raw_val;

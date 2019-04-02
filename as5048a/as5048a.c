@@ -78,7 +78,7 @@ void encoder_setup(float magnet_pair)
 {
 	magnet_pair_ = magnet_pair;
 	as5048a_read_two();
-	zero_offset = (pi_f - position_val);
+	zero_offset = (position_val);
 }
 
 void encoder_setup_ex(float magnet_pair, float zero_position)
@@ -92,8 +92,8 @@ void get_mech_position(float* mech_position, float inc_time)
 	as5048a_read();
 	joint_position_val_pre = joint_position_val;
 	
-	joint_position_val = (position_val + zero_offset );
-	if (joint_position_val < 0){
+	joint_position_val = (position_val - zero_offset );
+	if (joint_position_val < 0.0f){
 		joint_position_val += pi_2_f;
 	}
 	if(joint_position_val > pi_2_f){

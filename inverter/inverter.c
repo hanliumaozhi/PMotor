@@ -37,7 +37,7 @@ void inverter_setup(TIM_HandleTypeDef* motor_tim, SPI_HandleTypeDef* drv8301, GP
 	DRV8301 = drv8301;
 	DRV8301_PORT = port;
 	DRV8301_PIN = pin;
-	//drv8301_setup(drv8301, port, pin);
+	drv8301_setup(drv8301, port, pin);
 }
 
 void inverter_init(ADC_HandleTypeDef* a, ADC_HandleTypeDef* b, GPIO_TypeDef* power_port, uint16_t power_pin, float pwm_interval_)
@@ -51,7 +51,7 @@ void inverter_init(ADC_HandleTypeDef* a, ADC_HandleTypeDef* b, GPIO_TypeDef* pow
 	HAL_GPIO_WritePin(POWER_PORT, POWER_PIN, GPIO_PIN_SET);
 	HAL_Delay(500);
 	
-	//drv8301_init();
+	drv8301_init();
 	
 	HAL_Delay(500);
 	
@@ -123,6 +123,18 @@ void inverter_set_pwm(float a_t, float b_t, float c_t)
 	}
 	if (c_channel_val < MIN_LOW_COUNTER){
 		c_channel_val = MIN_LOW_COUNTER;
+	}
+	
+	if (a_channel_val > (MIN_HIGH_COUNTER+1)) {
+		a_channel_val = (MIN_HIGH_COUNTER + 1);
+	}
+	
+	if (c_channel_val > (MIN_HIGH_COUNTER + 3)) {
+		c_channel_val = (MIN_HIGH_COUNTER + 3);
+	}
+	
+	if (b_channel_val > (MIN_HIGH_COUNTER + 2)) {
+		b_channel_val = (MIN_HIGH_COUNTER + 2);
 	}
 	__HAL_TIM_SET_COMPARE(motor_pwm, TIM_CHANNEL_1, a_channel_val);
 	__HAL_TIM_SET_COMPARE(motor_pwm, TIM_CHANNEL_2, b_channel_val);

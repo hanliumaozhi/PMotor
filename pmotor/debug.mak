@@ -6,7 +6,7 @@ BINARYDIR := Debug
 
 #Additional flags
 PREPROCESSOR_MACROS := DEBUG=1 __FPU_PRESENT=1 flash_layout STM32F446xx
-INCLUDE_DIRS := ..\hal_code\Inc ..\hal_code\Drivers\CMSIS\Include ..\hal_code\Drivers\CMSIS\Device\ST\STM32F4xx\Include ..\hal_code\Drivers\STM32F4xx_HAL_Driver\Inc ..\hal_code\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy ..\as5048a ..\coordinate_change ..\current_regulator ..\drv8301 ..\impedance_controller ..\inverter ..\svpwm ..\hal_code\Drivers\CMSIS\DSP\Include ..\utils
+INCLUDE_DIRS := ..\as5048a ..\coordinate_change ..\current_regulator ..\drv8301 ..\impedance_controller ..\inverter ..\svpwm ..\hal_code\Drivers\CMSIS\DSP\Include ..\utils ..\hal_code\Inc ..\hal_code\Drivers\CMSIS\Include ..\hal_code\Drivers\CMSIS\Device\ST\STM32F4xx\Include ..\hal_code\Drivers\STM32F4xx_HAL_Driver\Inc ..\hal_code\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy
 LIBRARY_DIRS := ..\hal_code\Drivers\CMSIS\Lib\GCC
 LIBRARY_NAMES := arm_cortexM4lf_math
 ADDITIONAL_LINKER_INPUTS := 
