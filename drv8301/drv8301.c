@@ -23,7 +23,7 @@ void drv8301_init(void)
 {
 	write_word = 0;
 	// for 3 pwm input
-	write_word |= CTRL1_PWM_MODE_3_INPUT;
+	write_word |= CTRL1_PWM_MODE_6_INPUT;
 	// for (60/7)A current limit (only for test)
 	//write_word |= CTRL1_OC_ADJ_SET(0);
 	//for disable oc disabled

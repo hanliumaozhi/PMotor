@@ -127,7 +127,7 @@ int main(void)
 	inverter_setup(&htim1, &hspi3, SPI3_EN_GPIO_Port, SPI3_EN_Pin);
 	inverter_init(&hadc1, &hadc2, DRV8301_EN_GPIO_Port, DRV8301_EN_Pin, PWM_INTERVAL);
 	
-	impedance_controller_setup(0.01, 0.001f, 0.1071, (PWM_INTERVAL*2));
+	impedance_controller_setup(0.01, 0.001f, 0.1071, (PWM_INTERVAL * 2));
 	
 	current_regulator_setup(0.2046f, 0.1535f);
 	current_regulator_init();
@@ -137,55 +137,55 @@ int main(void)
 	
 	//__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 45);
 	inverter_set_pwm_percentage(0.03f, 0.0f, 0.0f);
-	HAL_Delay(2000);
-	HAL_TIM_Base_Start_IT(&htim1);
-	HAL_Delay(2000);
-	HAL_TIM_Base_Start_IT(&htim3);
+	//HAL_Delay(2000);
+	//HAL_TIM_Base_Start_IT(&htim1);
+	//HAL_Delay(2000);
+	//HAL_TIM_Base_Start_IT(&htim3);
 
-	/* USER CODE END 2 */
+  /* USER CODE END 2 */
 
-	/* Infinite loop */
-	/* USER CODE BEGIN WHILE */
-	while (1)
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+	while(1)
 	{
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
 		
-			/*s_pre_counter = __HAL_TIM_GET_COUNTER(&htim2);
+						/*s_pre_counter = __HAL_TIM_GET_COUNTER(&htim2);
+						as5048a_read();
+						s_post_counter = __HAL_TIM_GET_COUNTER(&htim2);
+						s_total_time += (s_post_counter - s_pre_counter);
+						++s_counter;
+						if (falut_status != 0){
+							++s_error_counter;
+				}
+				delay_us(45);
+				if (s_counter == 10000){
+					sprintf(msg, "time: %lf - %f - %d \r\n", (s_total_time / 10000.0f), position_val, s_error_counter);
+					HAL_UART_Transmit(&huart2, (uint8_t*) msg, strlen(msg), HAL_MAX_DELAY);
+					s_total_time = 0;
+					s_counter = 0;
+					s_error_counter = 0;	
+			}*/
+			/*so_1_voltage = ((float)so_1_raw_val) / 4095.0f * 3.3f;
+			so_2_voltage = ((float)so_2_raw_val) / 4095.0f * 3.3f;
 			as5048a_read();
+			sprintf(msg, "%f --- %f --- %f\r\n", so_1_voltage, so_2_voltage, position_val);
+			HAL_UART_Transmit(&huart2, (uint8_t*) msg, strlen(msg), HAL_MAX_DELAY);
+			HAL_Delay(1000);*/
+		
+			/*s_pre_counter = __HAL_TIM_GET_COUNTER(&htim2);
+			IC_running(3.14159265359f);
 			s_post_counter = __HAL_TIM_GET_COUNTER(&htim2);
 			s_total_time += (s_post_counter - s_pre_counter);
 			++s_counter;
-			if (falut_status != 0){
-				++s_error_counter;
-		}
-		delay_us(45);
-		if (s_counter == 10000){
-			sprintf(msg, "time: %lf - %f - %d \r\n", (s_total_time / 10000.0f), position_val, s_error_counter);
-			HAL_UART_Transmit(&huart2, (uint8_t*) msg, strlen(msg), HAL_MAX_DELAY);
-			s_total_time = 0;
-			s_counter = 0;
-			s_error_counter = 0;	
-		}*/
-		/*so_1_voltage = ((float)so_1_raw_val) / 4095.0f * 3.3f;
-		so_2_voltage = ((float)so_2_raw_val) / 4095.0f * 3.3f;
-		as5048a_read();
-		sprintf(msg, "%f --- %f --- %f\r\n", so_1_voltage, so_2_voltage, position_val);
-		HAL_UART_Transmit(&huart2, (uint8_t*) msg, strlen(msg), HAL_MAX_DELAY);
-		HAL_Delay(1000);*/
-		
-		/*s_pre_counter = __HAL_TIM_GET_COUNTER(&htim2);
-		IC_running(3.14159265359f);
-		s_post_counter = __HAL_TIM_GET_COUNTER(&htim2);
-		s_total_time += (s_post_counter - s_pre_counter);
-		++s_counter;
-		if (s_counter == 10000) {
-			sprintf(msg, "time: %f \r\n", (s_total_time / 10000.0f));
-			HAL_UART_Transmit(&huart2, (uint8_t*) msg, strlen(msg), HAL_MAX_DELAY);
-			s_total_time = 0;
-			s_counter = 0;
-			s_error_counter = 0;	
+			if (s_counter == 10000) {
+				sprintf(msg, "time: %f \r\n", (s_total_time / 10000.0f));
+				HAL_UART_Transmit(&huart2, (uint8_t*) msg, strlen(msg), HAL_MAX_DELAY);
+				s_total_time = 0;
+				s_counter = 0;
+				s_error_counter = 0;	
 		}*/
 		read_drv8301_state();
 		sprintf(msg, "%x \r\n", response_status_drv);
@@ -224,7 +224,7 @@ void SystemClock_Config(void)
 		Error_Handler();
 	}
 	/** Activate the Over-Drive mode 
-	*/
+	 */
 	if (HAL_PWREx_EnableOverDrive() != HAL_OK)
 	{
 		Error_Handler();
@@ -255,7 +255,7 @@ void TIM1_UP_TIM10_IRQHandler(void)
 
 void TIM3_IRQHandler(void)
 {
-	if (TIM3->SR){
+	if (TIM3->SR) {
 		debug_pin_GPIO_Port->ODR ^= debug_pin_Pin;
 	}
 	TIM3->SR = 0x0;
@@ -271,7 +271,7 @@ void TIM3_IRQHandler(void)
 void Error_Handler(void)
 {
 	/* USER CODE BEGIN Error_Handler_Debug */
-	  /* User can add his own implementation to report the HAL error return state */
+			/* User can add his own implementation to report the HAL error return state */
 
 	/* USER CODE END Error_Handler_Debug */
 }
@@ -287,9 +287,9 @@ void Error_Handler(void)
 void assert_failed(uint8_t *file, uint32_t line)
 { 
 	/* USER CODE BEGIN 6 */
-	  /* User can add his own implementation to report the file name and line number,
-	     tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-    /* USER CODE END 6 */
+			/* User can add his own implementation to report the file name and line number,
+			   tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+	/* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
 

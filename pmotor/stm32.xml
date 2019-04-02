@@ -48,7 +48,7 @@
     <AllDependencies>
       <ProjectDependency>
         <RelativePath>..\hal_code\hal_code.gpdsc</RelativePath>
-        <Timestamp>131985723577058146</Timestamp>
+        <Timestamp>131986486526469131</Timestamp>
       </ProjectDependency>
     </AllDependencies>
     <RootDirectory>

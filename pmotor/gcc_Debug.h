@@ -1378,11 +1378,14 @@
 #endif
 
 // --- Include directories begin --- //
-//..\hal_code\Inc
-//..\hal_code\Drivers\CMSIS\Include
-//..\hal_code\Drivers\CMSIS\Device\ST\STM32F4xx\Include
-//..\hal_code\Drivers\STM32F4xx_HAL_Driver\Inc
-//..\hal_code\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy
+//.
+//$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0
+//$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0\arm-eabi\thumb\fpu\cortex_m4
+//$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0\backward
+//$(TOOLCHAIN_ROOT)\lib\gcc\arm-eabi\7.2.0\include
+//$(TOOLCHAIN_ROOT)\lib\gcc\arm-eabi\7.2.0\include-fixed
+//$(TOOLCHAIN_ROOT)\arm-eabi\sys-include
+//$(TOOLCHAIN_ROOT)\arm-eabi\include
 //..\as5048a
 //..\coordinate_change
 //..\current_regulator
@@ -1392,14 +1395,11 @@
 //..\svpwm
 //..\hal_code\Drivers\CMSIS\DSP\Include
 //..\utils
-//.
-//$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0
-//$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0\arm-eabi\thumb\fpu\cortex_m4
-//$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0\backward
-//$(TOOLCHAIN_ROOT)\lib\gcc\arm-eabi\7.2.0\include
-//$(TOOLCHAIN_ROOT)\lib\gcc\arm-eabi\7.2.0\include-fixed
-//$(TOOLCHAIN_ROOT)\arm-eabi\sys-include
-//$(TOOLCHAIN_ROOT)\arm-eabi\include
+//..\hal_code\Inc
+//..\hal_code\Drivers\CMSIS\Include
+//..\hal_code\Drivers\CMSIS\Device\ST\STM32F4xx\Include
+//..\hal_code\Drivers\STM32F4xx_HAL_Driver\Inc
+//..\hal_code\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy
 // --- Include directories end --- //
 
 

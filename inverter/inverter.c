@@ -59,6 +59,9 @@ void inverter_init(ADC_HandleTypeDef* a, ADC_HandleTypeDef* b, GPIO_TypeDef* pow
 	HAL_TIM_PWM_Start(motor_pwm, TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(motor_pwm, TIM_CHANNEL_2);
 	HAL_TIM_PWM_Start(motor_pwm, TIM_CHANNEL_3);
+	HAL_TIMEx_PWMN_Start(motor_pwm, TIM_CHANNEL_1);
+	HAL_TIMEx_PWMN_Start(motor_pwm, TIM_CHANNEL_2);
+	HAL_TIMEx_PWMN_Start(motor_pwm, TIM_CHANNEL_3);
 	
 	__HAL_TIM_SET_COMPARE(motor_pwm, TIM_CHANNEL_1, MAX_PWM);
 	__HAL_TIM_SET_COMPARE(motor_pwm, TIM_CHANNEL_2, MAX_PWM);
