@@ -23,4 +23,5 @@ void get_elec_position(float* elec_position);
 
 void get_mech_velocity(float* mech_velocity);
 void get_elec_velocity(float* elec_velocity);
+void get_distance_as(float pre_position, float current_postion, float* goal_distance);
 #endif // !AS5048A_H

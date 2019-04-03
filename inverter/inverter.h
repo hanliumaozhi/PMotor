@@ -9,7 +9,7 @@
 #define HALF_PWM_INTERVAL 0.000025f
 #define MAX_PWM 500
 #define MIN_LOW_COUNTER 40
-#define MIN_HIGH_COUNTER 435
+#define MIN_HIGH_COUNTER 470
 
 extern volatile uint16_t so_1_raw_val;
 extern volatile uint16_t so_2_raw_val;

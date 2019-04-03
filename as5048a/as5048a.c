@@ -20,6 +20,7 @@ uint16_t falut_status;
 float magnet_pair_;
 float pi_f = 3.14159265359f;
 float pi_2_f = 6.28318530718f;
+float postion_inc_;
 
 
 void as5048a_setup(SPI_HandleTypeDef* spiHandle, GPIO_TypeDef* as5048a_port, uint16_t as5048a_pin)
@@ -101,15 +102,16 @@ void get_mech_position(float* mech_position, float inc_time)
 	}
 	*mech_position = joint_position_val;
 	
-	//we assume the motor cant move full range
-	joint_velocity = (joint_position_val - joint_position_val_pre) / inc_time;
+	//~we assume the motor cant move full range~
+	get_distance_as(joint_position_val_pre, joint_position_val, &postion_inc_);
+	joint_velocity = (postion_inc_) / inc_time;
 	
 	
 }
 
 void get_elec_position(float* elec_position)
 {
-	*elec_position = magnet_pair_*position_val;
+	*elec_position = (magnet_pair_*joint_position_val);
 }
 
 void get_mech_velocity(float* mech_velocity)
@@ -120,4 +122,15 @@ void get_mech_velocity(float* mech_velocity)
 void get_elec_velocity(float* elec_velocity)
 {
 	*elec_velocity = joint_velocity*magnet_pair_;
+}
+
+void get_distance_as(float pre_position, float current_postion, float* goal_distance)
+{
+	if ( current_postion - pre_position > pi_f) {
+		*goal_distance = (current_postion - (pre_position+pi_2_f));
+	}
+	
+	if ( current_postion - pre_position < -pi_f) {
+		*goal_distance = ((current_postion + pi_2_f) - pre_position);
+	}
 }

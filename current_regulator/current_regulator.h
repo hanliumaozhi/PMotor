@@ -6,6 +6,9 @@
 #include "coordinate_change.h"
 #include "svpwm.h"
 
+extern float v_alpha_;
+extern float v_beta_;
+
 void current_regulator_setup(float kp, float ki);
 void current_regulator_init();
 

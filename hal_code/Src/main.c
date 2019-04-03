@@ -120,14 +120,15 @@ int main(void)
 	as5048a_setup(&hspi2, SPI2_EN_GPIO_Port, SPI2_EN_Pin);
 	//for data init
 	as5048a_read_two();
-	encoder_setup(21.0f);
 	svpwm_setup(22.2f, PWM_INTERVAL);
 	set_us_delay(&htim2);
 	
 	inverter_setup(&htim1, &hspi3, SPI3_EN_GPIO_Port, SPI3_EN_Pin);
+	inverter_set_pwm_percentage(0.03f, 0.0f, 0.0f);
+	HAL_Delay(2000);
 	inverter_init(&hadc1, &hadc2, DRV8301_EN_GPIO_Port, DRV8301_EN_Pin, PWM_INTERVAL);
 	
-	impedance_controller_setup(0.01, 0.001f, 0.1071, (PWM_INTERVAL * 2));
+	impedance_controller_setup(0.01, 0.001f, 0.1071, PWM_INTERVAL);
 	
 	current_regulator_setup(0.2046f, 0.1535f);
 	current_regulator_init();
@@ -135,11 +136,9 @@ int main(void)
 	//for counter
 	HAL_TIM_Base_Start(&htim2);
 	
-	//__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 45);
-	inverter_set_pwm_percentage(0.03f, 0.0f, 0.0f);
-	//HAL_Delay(2000);
-	//HAL_TIM_Base_Start_IT(&htim1);
-	//HAL_Delay(2000);
+	HAL_TIM_Base_Start_IT(&htim1);
+	HAL_Delay(2000);
+	encoder_setup(21.0f);
 	//HAL_TIM_Base_Start_IT(&htim3);
 
   /* USER CODE END 2 */
@@ -187,10 +186,13 @@ int main(void)
 				s_counter = 0;
 				s_error_counter = 0;	
 		}*/
-		read_drv8301_state();
+		/*read_drv8301_state();
 		sprintf(msg, "%x \r\n", response_status_drv);
 		HAL_UART_Transmit(&huart2, (uint8_t*) msg, strlen(msg), HAL_MAX_DELAY);
-		HAL_Delay(1000);	
+		HAL_Delay(1000);*/
+		sprintf(msg, "%f %f %f \r\n", joint_position_val, v_alpha_, v_beta_);
+		HAL_UART_Transmit(&huart2, (uint8_t*) msg, strlen(msg), HAL_MAX_DELAY);
+		HAL_Delay(100);
 	}
 	/* USER CODE END 3 */
 }
@@ -249,6 +251,7 @@ void TIM1_UP_TIM10_IRQHandler(void)
 {
 	if (TIM1->SR & TIM_SR_UIF) {
 		inverter_sample_current();
+		IC_running(0.2f);
 	}
 	TIM1->SR = 0x0;
 }
@@ -256,11 +259,12 @@ void TIM1_UP_TIM10_IRQHandler(void)
 void TIM3_IRQHandler(void)
 {
 	if (TIM3->SR) {
-		debug_pin_GPIO_Port->ODR ^= debug_pin_Pin;
+		//debug_pin_GPIO_Port->ODR ^= debug_pin_Pin;
+		//IC_running(0.2f);
+		//debug_pin_GPIO_Port->ODR ^= debug_pin_Pin;
 	}
 	TIM3->SR = 0x0;
-	IC_running(0.2f);
-	debug_pin_GPIO_Port->ODR ^= debug_pin_Pin;
+	
 }
 /* USER CODE END 4 */
 

@@ -38,6 +38,20 @@ void inverter_setup(TIM_HandleTypeDef* motor_tim, SPI_HandleTypeDef* drv8301, GP
 	DRV8301_PORT = port;
 	DRV8301_PIN = pin;
 	drv8301_setup(drv8301, port, pin);
+	
+	
+	pwm_interval = PWM_INTERVAL;
+	total_counter = (float)MAX_PWM;
+	HAL_TIM_PWM_Start(motor_pwm, TIM_CHANNEL_1);
+	HAL_TIM_PWM_Start(motor_pwm, TIM_CHANNEL_2);
+	HAL_TIM_PWM_Start(motor_pwm, TIM_CHANNEL_3);
+	HAL_TIMEx_PWMN_Start(motor_pwm, TIM_CHANNEL_1);
+	HAL_TIMEx_PWMN_Start(motor_pwm, TIM_CHANNEL_2);
+	HAL_TIMEx_PWMN_Start(motor_pwm, TIM_CHANNEL_3);
+	
+	__HAL_TIM_SET_COMPARE(motor_pwm, TIM_CHANNEL_1, MAX_PWM);
+	__HAL_TIM_SET_COMPARE(motor_pwm, TIM_CHANNEL_2, MAX_PWM);
+	__HAL_TIM_SET_COMPARE(motor_pwm, TIM_CHANNEL_3, MAX_PWM);
 }
 
 void inverter_init(ADC_HandleTypeDef* a, ADC_HandleTypeDef* b, GPIO_TypeDef* power_port, uint16_t power_pin, float pwm_interval_)
@@ -56,19 +70,6 @@ void inverter_init(ADC_HandleTypeDef* a, ADC_HandleTypeDef* b, GPIO_TypeDef* pow
 	HAL_Delay(500);
 	
 	//HAL_TIM_Base_Start(motor_pwm);
-	HAL_TIM_PWM_Start(motor_pwm, TIM_CHANNEL_1);
-	HAL_TIM_PWM_Start(motor_pwm, TIM_CHANNEL_2);
-	HAL_TIM_PWM_Start(motor_pwm, TIM_CHANNEL_3);
-	HAL_TIMEx_PWMN_Start(motor_pwm, TIM_CHANNEL_1);
-	HAL_TIMEx_PWMN_Start(motor_pwm, TIM_CHANNEL_2);
-	HAL_TIMEx_PWMN_Start(motor_pwm, TIM_CHANNEL_3);
-	
-	__HAL_TIM_SET_COMPARE(motor_pwm, TIM_CHANNEL_1, MAX_PWM);
-	__HAL_TIM_SET_COMPARE(motor_pwm, TIM_CHANNEL_2, MAX_PWM);
-	__HAL_TIM_SET_COMPARE(motor_pwm, TIM_CHANNEL_3, MAX_PWM);
-	
-	pwm_interval = pwm_interval_;
-	total_counter = (float)MAX_PWM;
 	
 	//init adc
 	a_adc->Instance->CR2 |= 0x00000001;
@@ -128,16 +129,16 @@ void inverter_set_pwm(float a_t, float b_t, float c_t)
 		c_channel_val = MIN_LOW_COUNTER;
 	}
 	
-	if (a_channel_val > (MIN_HIGH_COUNTER+1)) {
-		a_channel_val = (MIN_HIGH_COUNTER + 1);
+	if (a_channel_val > (MIN_HIGH_COUNTER)) {
+		a_channel_val = (MIN_HIGH_COUNTER);
 	}
 	
-	if (c_channel_val > (MIN_HIGH_COUNTER + 3)) {
-		c_channel_val = (MIN_HIGH_COUNTER + 3);
+	if (c_channel_val > (MIN_HIGH_COUNTER)) {
+		c_channel_val = (MIN_HIGH_COUNTER);
 	}
 	
-	if (b_channel_val > (MIN_HIGH_COUNTER + 2)) {
-		b_channel_val = (MIN_HIGH_COUNTER + 2);
+	if (b_channel_val > (MIN_HIGH_COUNTER)) {
+		b_channel_val = (MIN_HIGH_COUNTER);
 	}
 	__HAL_TIM_SET_COMPARE(motor_pwm, TIM_CHANNEL_1, a_channel_val);
 	__HAL_TIM_SET_COMPARE(motor_pwm, TIM_CHANNEL_2, b_channel_val);
@@ -162,6 +163,18 @@ void inverter_set_pwm_percentage(float a_t, float b_t, float c_t)
 	}
 	if (c_channel_val < MIN_LOW_COUNTER) {
 		c_channel_val = MIN_LOW_COUNTER;
+	}
+	
+	if (a_channel_val > (MIN_HIGH_COUNTER)) {
+		a_channel_val = (MIN_HIGH_COUNTER);
+	}
+	
+	if (c_channel_val > (MIN_HIGH_COUNTER)) {
+		c_channel_val = (MIN_HIGH_COUNTER);
+	}
+	
+	if (b_channel_val > (MIN_HIGH_COUNTER)) {
+		b_channel_val = (MIN_HIGH_COUNTER);
 	}
 	__HAL_TIM_SET_COMPARE(motor_pwm, TIM_CHANNEL_1, a_channel_val);
 	__HAL_TIM_SET_COMPARE(motor_pwm, TIM_CHANNEL_2, b_channel_val);
